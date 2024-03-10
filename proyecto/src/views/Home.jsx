@@ -1,45 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Button } from 'react-bootstrap';
-import dataPizzas from "../pizzas.json";
+import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Context } from "../context/Context";
+import pizzaData from "../pizzas.json";
 
-const Home = () => {
-  const [pizzas, setPizzas] = useState([]);
+export const Home = () => {
+  const { setCar } = useContext(Context);
+  const [homepizzas, setHomepizzas] = useState([]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setPizzas(dataPizzas);
-  }, []);
+  const add = (i, x) => {
+    setHomepizzas((prevHomepizzas) => [...prevHomepizzas, i]);
+    setCar((currentHomepizzas) => [...currentHomepizzas, i]);
+  };
+
+  const GoToPizza = (name) => {
+    navigate(`/Pizza/${name}`);
+  };
 
   return (
-    <div>
-      <h1 className="text-center mb-4">Lista de Pizzas</h1>
-      <Row xs={1} md={2} lg={3} className="g-4">
-        {pizzas.map((pizza) => (
-          <Col key={pizza.id}>
-            <Card>
-              <Card.Img variant="top" src={pizza.img} alt={pizza.name} />
-              <Card.Body>
-                <Card.Title>{pizza.name}</Card.Title>
-                <Card.Text>{pizza.desc}</Card.Text>
-                <Card.Text>
-                  <strong>Ingredientes:</strong>
-                  <ul>
-                    {pizza.ingredients.map((ingredient, index) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
-                  </ul>
-                </Card.Text>
-                <Card.Text>Precio: {pizza.price}</Card.Text>
-                <div className="d-grid gap-2">
-                  <Button variant="info" className="me-2">Ver más 👀</Button>
-                  <Button variant="danger">Añadir 🛒</Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
+    <>
+      <div>
+        <h1>¡Pizzería Mamma Mía!</h1>
+      </div>
+      <div className="div-products-home" id="div-products-home">
+        {pizzaData.map((i, x) => (
+          <div key={i.price} className="div-product-home" id={i.id}>
+            <img src={i.img} alt={i.name} />
+            <h4>{i.name}</h4>
+            <h5>Ingredientes:</h5>
+            <ul>
+              {i.ingredients.map((i) => (
+                <li key={i.price}>
+                  🍕
+                  <p id="first-letter">{i}</p>
+                </li>
+              ))}
+            </ul>
+            <h4>$ {i.price.toLocaleString("de-DE")}</h4>
+            <div className="div-button">
+              <button
+                onClick={() => GoToPizza(i.name)}
+                className="button-home-1"
+                id="allbutton"
+              >
+                Ver más👀
+              </button>
+              <button
+                onClick={() => add(i, x)}
+                className="button-home-2"
+                id="allbutton"
+              >
+                Añadir🛒
+              </button>
+            </div>
+          </div>
         ))}
-      </Row>
-    </div>
+      </div>
+    </>
   );
 };
-
 export default Home;

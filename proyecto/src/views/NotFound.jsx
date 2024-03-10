@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 const NotFound = () => {
   return (
-    <div>NotFound</div>
+    <h2>Elemento no disponible</h2>
   )
 }
 
